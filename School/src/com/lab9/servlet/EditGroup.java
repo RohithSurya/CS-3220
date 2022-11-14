@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Group;
 import com.lab9.entities.Student;
+import com.lab9.service.DbService;
 
 /**
  * Servlet implementation class EditGroup
@@ -33,9 +34,10 @@ public class EditGroup extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		Integer groupId = Integer.parseInt(request.getParameter("group"));
-		List<Group> groups = (List<Group>)getServletContext().getAttribute("groups");
-		Group group = getGroup(groupId, groups);
-		request.setAttribute("group", group);
+		var dbService = new DbService();
+		request.setAttribute("group", dbService.getGroup(groupId));
+		dbService.close();
+		
 		request.getRequestDispatcher("/WEB-INF/EditGroup.jsp").forward(request, response);
 	}
 
@@ -44,26 +46,11 @@ public class EditGroup extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Integer groupId = Integer.parseInt(request.getParameter("id"));
-		List<Group> groups = (List<Group>)getServletContext().getAttribute("groups");
-		Group group = getGroup(groupId, groups);
-		group.setName(request.getParameter("name"));
+		var dbService = new DbService();
+		dbService.editGroup(Integer.parseInt(request.getParameter("id")), request.getParameter("name"));
+		dbService.close();
 		response.sendRedirect("GroupListServlet");
 		
-	}
-	
-	Student findStudent(Integer id, List<Student> students) {
-		for(Student student: students) 
-			if(id==student.getId()) 
-				return student;
-		return null;
-	}
-	
-	Group getGroup(Integer id, List<Group> groups) {
-		for(Group group: groups) {
-			if(group.getId()==id) return group;
-		}
-		return null;
 	}
 	
 	

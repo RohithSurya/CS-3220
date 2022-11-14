@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Group;
+import com.lab9.service.DbService;
 
 @WebServlet("/AddGroup")
 public class AddGroup extends HttpServlet {
@@ -44,8 +45,9 @@ public class AddGroup extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String name = request.getParameter("name");
-		List<Group> groups = (List<Group>)getServletContext().getAttribute("groups");
-		groups.add(new Group(name, new ArrayList<>()));
+		var dbService = new DbService();
+		dbService.addGroup(name);
+		dbService.close();
 		response.sendRedirect( "GroupListServlet" );
 	}
 

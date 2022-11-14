@@ -26,29 +26,6 @@ public class HomeServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    
-    
-    public void init(ServletConfig config) throws ServletException {
-    	super.init(config);
-    	List<Group> groups = new ArrayList<>();
-    	Group group = new Group();
-    	group.setName("Avengers");
-    	List<Student> gStudents = new ArrayList<Student>();
-    	Student student = new Student("Akash", 2001, "Tatina", "akash@calstatela.edu", group);
-    	gStudents.add(student);
-    	group.setStudents(gStudents);
-    	groups.add(group);
-    	List<Student> students = new ArrayList<>();
-        students.add(student);
-        student = new Student("Sagar", 2000, "Addala", "sagar@calstatela.edu", group);
-        gStudents.add(student);
-        group.setStudents(gStudents);
-        students.add(student);
-        ServletContext servletContext = getServletContext();
-        servletContext.setAttribute("students", students);
-        servletContext.setAttribute("groups", groups);
-    	
-    }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)

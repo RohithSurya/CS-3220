@@ -22,6 +22,10 @@ public class Student {
 		this.group = group;
 	}
 	
+	public Student() {
+		
+	}
+	
 	
 	public Integer getId() {
 		return id;
@@ -67,10 +71,15 @@ public class Student {
 	public void setGroup(Group group) {
 		this.group = group;
 	}
+
 	@Override
 	public String toString() {
-		return "Student [name=" + name + ", age=" + year + ", parent=" + parent + ", email=" + email + "]";
+		return "Student [id=" + id + ", name=" + name + ", year=" + year + ", parent=" + parent + ", email=" + email
+				+ ", group=" + group + "]";
 	}
+	
+	
+	
 	
 	
 	

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Group;
 import com.lab9.entities.Student;
+import com.lab9.service.DbService;
 
 /**
  * Servlet implementation class EditStudent
@@ -32,53 +33,27 @@ public class EditStudent extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Integer id = Integer.parseInt(request.getParameter("edit"));
-		List<Student> students = (List<Student>) getServletContext().getAttribute("students");
-		request.setAttribute("student", findStudent(id, students));
+		var dbService = new DbService();
+		var student = dbService.getStudent(Integer.parseInt(request.getParameter("edit")));
+		request.setAttribute("groups", dbService.getGroupsForEditStudent(student.getGroup()!=null ? student.getGroup().getId() : null));
+		request.setAttribute("student", student);
+		dbService.close();
 		request.getRequestDispatcher("/WEB-INF/EditStudent.jsp").forward(request, response);
 	}
 	
-	
-	Student findStudent(Integer id, List<Student> students) {
-		for(Student student: students) 
-			if(id==student.getId()) 
-				return student;
-		return null;
-	}
-
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		List<Student> students = (List<Student>) getServletContext().getAttribute("students");
-		List<Group> groups = (List<Group>)getServletContext().getAttribute("groups");
 		
-		Integer id = Integer.parseInt(request.getParameter("id"));
-		Student student = findStudent(id, students);
-		Group oldGroup = student.getGroup();
-		student.setName(request.getParameter("name"));
-		student.setYear(Integer.parseInt(request.getParameter("year")));
-		student.setParent(request.getParameter("parentName"));
-		student.setEmail(request.getParameter("parentEmail"));
-		String groupId = request.getParameter("group");
-		Group newGroup = (groupId==null || groupId.equals("")) ? null: getGroup(Integer.parseInt(groupId), groups);
-		if(newGroup!=oldGroup) {
-			student.setGroup(newGroup);
-			if(oldGroup!=null)
-				oldGroup.getStudents().remove(student);
-			if(newGroup!=null)
-				newGroup.getStudents().add(student);
-		}
-
+		String groupObj = request.getParameter("group");
+		Integer groupId = (groupObj==null || groupObj.equals("")) ? null: Integer.parseInt(groupObj);
+		var dbService = new DbService();
+		dbService.editStudent(Integer.parseInt(request.getParameter("id")), request.getParameter("name"), Integer.parseInt(request.getParameter("year")), request.getParameter("parentName"), request.getParameter("parentEmail"), groupId);
+		dbService.close();
+		
 		response.sendRedirect( "StudentListServlet" );
-	}
-	
-	Group getGroup(Integer id, List<Group> groups) {
-		for(Group group: groups) {
-			if(group.getId()==id) return group;
-		}
-		return null;
 	}
 	
 	

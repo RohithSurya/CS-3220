@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lab9.service.DbService;
+
 @WebServlet("/StudentListServlet")
 public class StudentListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -30,6 +32,9 @@ public class StudentListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		var dbService = new DbService();
+		request.setAttribute("students", dbService.getStudents());
+		dbService.close();
 		request.getRequestDispatcher("/WEB-INF/StudentList.jsp").forward(request, response);
 	}
 

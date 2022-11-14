@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Group;
 import com.lab9.entities.Student;
+import com.lab9.service.DbService;
 
 @WebServlet("/AddStudent")
 public class AddStudent extends HttpServlet {
@@ -36,6 +37,9 @@ public class AddStudent extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		var dbService = new DbService();
+		request.setAttribute("groups", dbService.getGroupsForCreateStudent());
+		dbService.close();
 		request.getRequestDispatcher("/WEB-INF/AddStudent.jsp").forward(request, response);
 	}
 
@@ -49,23 +53,10 @@ public class AddStudent extends HttpServlet {
 		String parentName = request.getParameter("parentName");
 		String parentEmail = request.getParameter("parentEmail");
 		String groupId = request.getParameter("group");
-		Group group = (groupId==null || groupId.equals("")) ? null: getGroup(Integer.parseInt(groupId));
-		Student student = new Student(name, year, parentName , parentEmail, group);
-		if(group!=null) {
-			group.getStudents().add(student);
-			student.setGroup(group);
-		}
-		List<Student> students = (List<Student>) getServletContext().getAttribute("students");
-		students.add(student);
+		var dbService = new DbService();
+		dbService.addStudent(name, year, parentName, parentEmail, (groupId==null || groupId.equals("")) ? null: Integer.parseInt(groupId));
+		dbService.close();
 
 		response.sendRedirect( "StudentListServlet" );
-	}
-	
-	Group getGroup(Integer id) {
-		List<Group> groups = (List<Group>)getServletContext().getAttribute("groups");
-		for(Group group: groups) {
-			if(group.getId()==id) return group;
-		}
-		return null;
 	}
 }

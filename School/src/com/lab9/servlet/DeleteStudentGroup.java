@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Group;
 import com.lab9.entities.Student;
+import com.lab9.service.DbService;
 
 /**
  * Servlet implementation class DeleteStudentGroup
@@ -34,18 +35,9 @@ public class DeleteStudentGroup extends HttpServlet {
 		// TODO Auto-generated method stub
 		Integer id = Integer.parseInt(request.getParameter("sid"));
 		String groupId = request.getParameter("group");
-		List<Student> students = (List<Student>) getServletContext().getAttribute("students");
-		Student student = findStudent(id, students);
-		Group group = student.getGroup();
-		student.setGroup(null);
-		group.getStudents().remove(student);
+		var dbService = new DbService();
+		dbService.delelteStudentFromGroup(id);
+		dbService.close();
 		response.sendRedirect("EditGroup?group="+groupId);
-	}
-	
-	Student findStudent(Integer id, List<Student> students) {
-		for(Student student: students) 
-			if(id==student.getId()) 
-				return student;
-		return null;
 	}
 }

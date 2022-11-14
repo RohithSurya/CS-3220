@@ -76,7 +76,7 @@
 	
 								<div class="row mt-1">
 									<div class="col-sm-4">
-										<button class="btn btn-success">Add</button>
+										<button class="btn btn-success">Save</button>
 									</div>
 								</div>
 							</form>

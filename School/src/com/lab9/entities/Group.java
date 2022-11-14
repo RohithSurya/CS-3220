@@ -12,6 +12,7 @@ public class Group {
 	private Integer id;
 	private String name;
 	private List<Student> students;
+	private Integer maxSize;
 	
 	public Group() {
 		this.id=++idSeed;
@@ -48,12 +49,19 @@ public class Group {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+
+	public Integer getMaxSize() {
+		return maxSize;
+	}
+
+	public void setMaxSize(Integer maxSize) {
+		this.maxSize = maxSize;
+	}
 
 	@Override
 	public String toString() {
 		return "Group [id=" + id + ", name=" + name + ", students=" + students + "]";
 	}
-	
-	
 	
 }

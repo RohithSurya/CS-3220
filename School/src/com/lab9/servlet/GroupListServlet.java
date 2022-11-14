@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lab9.entities.Student;
+import com.lab9.service.DbService;
 
 @WebServlet("/GroupListServlet")
 public class GroupListServlet extends HttpServlet {
@@ -29,21 +30,12 @@ public class GroupListServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		var dbService = new DbService();
+		request.setAttribute("groups", dbService.getGroups());
+		dbService.close();
 		request.getRequestDispatcher("/WEB-INF/GroupList.jsp").forward(request, response);
 	}
 	
-	
-	String getGroupMembers(List<Student> students) {
-//		System.out.println(students);
-		StringBuilder sb = new StringBuilder();
-		for(Student student: students) {
-			sb.append(student.getName());
-			sb.append(", ");
-		}
-		if(sb.length()!=0)
-			return sb.substring(0, sb.length()-2);
-		return "";
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

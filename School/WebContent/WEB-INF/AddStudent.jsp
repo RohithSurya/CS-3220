@@ -60,9 +60,7 @@
 									<select name='group' class="form-control">
 										<option></option>
 										<c:forEach items="${groups}" var="group">
-											<c:if test="${fn:length(group.students) lt 5}">
-												<option value="${group.id}">${group.name}</option>
-											</c:if>
+											<option value="${group.id}">${group.name}</option>
 										</c:forEach>
 									</select>
 								</div>
